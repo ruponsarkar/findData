@@ -1,0 +1,8 @@
+fastapi>=0.115,<1
+uvicorn[standard]>=0.34,<1
+python-multipart>=0.0.20,<1
+PyMuPDF>=1.25,<2
+openpyxl>=3.1,<4
+xlrd>=2.0,<3
+msoffcrypto-tool>=6,<7
+cryptography>=39
