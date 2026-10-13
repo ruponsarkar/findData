@@ -6,7 +6,7 @@ module.exports = {
     cwd: __dirname,
     script: path.join(__dirname, '.venv', 'bin', 'python'),
     interpreter: 'none',
-    args: ['-m', 'uvicorn', 'app:app', '--host', '127.0.0.1', '--port', '8008', '--workers', '1'],
+    args: ['-m', 'uvicorn', 'app:app', '--host', '0.0.0.0', '--port', '8008', '--workers', '1'],
     exec_mode: 'fork',
     instances: 1,
     watch: false,
