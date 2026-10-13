@@ -11,10 +11,34 @@ python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 # Or use requirements.lock.txt for the exact tested dependency versions.
-uvicorn app:app --host 127.0.0.1 --port 8000
+uvicorn app:app --host 127.0.0.1 --port 8008
 ```
 
-Open http://127.0.0.1:8000. Use **Load sample statement** to try a clearly labeled sample, or upload your own files. API documentation: http://127.0.0.1:8000/docs.
+Open http://127.0.0.1:8008. Use **Load sample statement** to try a clearly labeled sample, or upload your own files. API documentation: http://127.0.0.1:8008/docs.
+
+## Run with PM2
+
+From the project directory, with the virtual environment and dependencies installed:
+
+```sh
+npm install -g pm2
+pm2 start ecosystem.config.js
+pm2 save
+```
+
+Stop any manually running Uvicorn server with Ctrl+C first, so port 8008 is available. Open http://127.0.0.1:8008. The configuration uses `.venv/bin/python` directly, so activating the virtual environment is unnecessary. It runs one Uvicorn worker, restarts after crashes, and disables file watching to avoid restarts when uploads or database files change.
+
+```sh
+pm2 status
+pm2 logs findData
+pm2 restart findData   # After application code changes
+pm2 stop findData
+pm2 delete findData   # Remove from PM2; does not delete application data
+```
+
+For automatic startup after reboot, run `pm2 startup`, execute the setup command PM2 prints, then run `pm2 save` again. PM2 detects the startup system (launchd on macOS). If you deliberately remove an application, run `pm2 save` afterward to update the saved process list. See [PM2 startup documentation](https://doc.pm2.io/en/runtime/guide/startup-hook/).
+
+After editing the process configuration, apply it with `pm2 restart ecosystem.config.js --update-env`. PM2 keeps its logs under `~/.pm2/logs`; configure log rotation for long-running installations. The default binding remains localhost; see the HTTPS deployment notes below for access from other machines.
 
 ## What it does
 
